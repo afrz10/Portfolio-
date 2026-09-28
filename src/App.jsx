@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  * 
- * AFRUZ — Master Portfolio Architecture (.tsx)
+ * AFRUZ — Master Portfolio Architecture (.jsx)
  * Luxury Leaf-Green Inversion & Cinematic Scroll Pacing:
  * - Palette: Deep organic leaf-green (#19241d), creamy ivory (#f9f6ee), muted sage (#8fa291), emerald neon (#34d399)
  * - Cinematic Pacing: Expanded scroll tracks (130vh–140vh) with weighted GSAP momentum (scrub: 1.5)
@@ -29,7 +29,7 @@ import { BRAND_DATA, PHILOSOPHY_DATA } from './data/portfolioData';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
-  const lenisRef = useRef<Lenis | null>(null);
+  const lenisRef = useRef(null);
 
   useEffect(() => {
     // 1. Initialize Lenis Smooth Scroll with weighted physical momentum
@@ -46,7 +46,7 @@ export default function App() {
     // 2. Direct Lenis + GSAP Ticker synchronization
     lenis.on('scroll', ScrollTrigger.update);
 
-    const tickerCallback = (time: number) => {
+    const tickerCallback = (time) => {
       lenis.raf(time * 1000);
     };
 

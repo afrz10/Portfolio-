@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" fill="none">
+  <defs>
+    <!-- Floor contact shadow -->
+    <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0a100c" stop-opacity="0.6"/>
+      <stop offset="40%" stop-color="#0e1711" stop-opacity="0.3"/>
+      <stop offset="80%" stop-color="#34d399" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#19241d" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Emerald Snake Energy Aura Glow -->
+    <radialGradient id="emeraldAura" cx="50%" cy="45%" r="48%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.22"/>
+      <stop offset="50%" stop-color="#10b981" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#19241d" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Coat gradient in deep organic charcoal/forest -->
+    <linearGradient id="coatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#243328"/>
+      <stop offset="50%" stop-color="#18231c"/>
+      <stop offset="100%" stop-color="#111813"/>
+    </linearGradient>
+
+    <!-- Warm ivory inner garment -->
+    <linearGradient id="innerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f9f6ee"/>
+      <stop offset="100%" stop-color="#dfdbd0"/>
+    </linearGradient>
+
+    <!-- Refined skin tone with subtle emerald rim light -->
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eed8c3"/>
+      <stop offset="60%" stop-color="#dfc0a5"/>
+      <stop offset="100%" stop-color="#cca88e"/>
+    </linearGradient>
+
+    <!-- Hair gradient -->
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#222b24"/>
+      <stop offset="100%" stop-color="#121713"/>
+    </linearGradient>
+
+    <!-- Emerald snake neon ribbons -->
+    <linearGradient id="emeraldNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="50%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ambient Emerald Snake Energy Backlight Glow -->
+  <ellipse cx="200" cy="240" rx="150" ry="190" fill="url(#emeraldAura)" />
+
+  <!-- Floor Contact Shadow -->
+  <ellipse cx="200" cy="475" rx="140" ry="18" fill="url(#shadowGrad)"/>
+
+  <!-- Character Figure (Cutout Silhouette) -->
+  <g id="character-figure">
+    <!-- Legs / Dark Trousers with subtle emerald seam -->
+    <path d="M165 370 L158 465 L176 467 L190 380 L210 380 L224 467 L242 465 L235 370 Z" fill="#141c16"/>
+    <path d="M156 462 L152 470 L178 470 L177 463 Z" fill="#0f1611"/>
+    <path d="M222 463 L221 470 L248 470 L244 462 Z" fill="#0f1611"/>
+
+    <!-- Minimal Warm Ivory Inner Garment -->
+    <path d="M182 170 L218 170 L225 365 L175 365 Z" fill="url(#innerGrad)"/>
+
+    <!-- Tailored Coat - Left Arm -->
+    <path d="M155 178 C140 185 120 220 115 280 C110 330 115 385 130 395 C135 398 145 392 148 385 C142 335 142 275 160 215 Z" fill="url(#coatGrad)"/>
+    <!-- Left Hand -->
+    <path d="M128 390 C125 400 130 412 136 415 C142 418 147 410 148 395 Z" fill="url(#skinGrad)"/>
+
+    <!-- Tailored Coat - Right Arm -->
+    <path d="M245 178 C260 185 280 220 285 280 C290 330 285 385 270 395 C265 398 255 392 252 385 C258 335 258 275 240 215 Z" fill="url(#coatGrad)"/>
+    <!-- Right Hand -->
+    <path d="M272 390 C275 400 270 412 264 415 C258 418 253 410 252 395 Z" fill="url(#skinGrad)"/>
+
+    <!-- Coat Main Torso Structure -->
+    <path d="M155 178 L184 172 L188 380 L140 375 C136 330 138 250 155 178 Z" fill="url(#coatGrad)"/>
+    <path d="M245 178 L216 172 L212 380 L260 375 C264 330 262 250 245 178 Z" fill="url(#coatGrad)"/>
+
+    <!-- Lapels with subtle reflection -->
+    <path d="M184 172 L198 250 L188 380 Z" fill="#1e2c22"/>
+    <path d="M216 172 L202 250 L212 380 Z" fill="#1a251d"/>
+
+    <!-- Fluid Emerald Neon Accent Ribbon (Snake Energy) -->
+    <path d="M192 190 C186 230 178 280 184 330 C188 360 196 385 190 410" stroke="url(#emeraldNeon)" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M208 210 C214 250 220 300 215 350" stroke="url(#emeraldNeon)" stroke-width="1.8" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- Signature Pocket Tag in Emerald Neon -->
+    <rect x="230" y="275" width="22" height="3.5" rx="1.75" fill="url(#emeraldNeon)"/>
+    <circle cx="248" cy="276.75" r="1.5" fill="#f9f6ee"/>
+
+    <!-- Neck & Collar -->
+    <path d="M188 150 L212 150 L215 174 L185 174 Z" fill="url(#skinGrad)"/>
+    <path d="M186 168 L200 180 L214 168 Z" fill="#222f26"/>
+
+    <!-- Head & Face Contour -->
+    <path d="M182 108 C182 85 218 85 218 108 C218 135 212 154 200 155 C188 154 182 135 182 108 Z" fill="url(#skinGrad)"/>
+
+    <!-- Refined Hair Silhouette -->
+    <path d="M178 100 C176 80 188 64 202 62 C216 60 226 72 225 90 C225 105 220 115 216 116 C214 104 212 95 200 95 C190 95 184 102 180 110 C178 106 178 102 178 100 Z" fill="url(#hairGrad)"/>
+    
+    <!-- Minimalist Eyewear Frame (Editorial touch in warm ivory/emerald tint) -->
+    <rect x="186" y="105" width="11" height="7" rx="2" stroke="#34d399" stroke-width="1.2" fill="none" opacity="0.85"/>
+    <rect x="203" y="105" width="11" height="7" rx="2" stroke="#34d399" stroke-width="1.2" fill="none" opacity="0.85"/>
+    <line x1="197" y1="108" x2="203" y2="108" stroke="#34d399" stroke-width="1.2" opacity="0.85"/>
+  </g>
+</svg>

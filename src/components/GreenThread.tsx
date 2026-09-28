@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * 
  * AFRUZ Green Thread System
- * Continuous visual identity system:
- * - Scroll progress thread at viewport top
- * - Minimal, thin, precise, leaf-green (#7D9A78)
- * - Timeline spine & accent connector utilities
+ * - Scroll progress thread at viewport top with emerald neon glow (#34d399)
  */
 
 import React, { useEffect, useState } from 'react';
@@ -36,7 +33,6 @@ export const ScrollProgressThread: React.FC = () => {
       }
     };
 
-    // Initial calculation on mount
     updateProgress();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -53,23 +49,9 @@ export const ScrollProgressThread: React.FC = () => {
       aria-hidden="true"
     >
       <div
-        className="h-full bg-gradient-to-r from-[#7D9A78] to-[#8FA88B] transition-[width] duration-100 ease-out"
+        className="h-full bg-gradient-to-r from-[#34d399] to-[#6ee7b7] shadow-[0_0_8px_rgba(52,211,153,0.6)] transition-[width] duration-100 ease-out"
         style={{ width: `${scrollProgress}%` }}
       />
-    </div>
-  );
-};
-
-export const ThreadDivider: React.FC<{ className?: string }> = ({ className = '' }) => {
-  return (
-    <div
-      className={`w-full flex items-center justify-center my-8 sm:my-14 relative ${className}`}
-      aria-hidden="true"
-    >
-      {/* Horizontal subtle gradient line */}
-      <div className="w-full max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-[#8FA88B]/30 to-transparent" />
-      {/* Central thread node for visual continuity */}
-      <div className="absolute w-1.5 h-1.5 rounded-full bg-[#7D9A78]/60" />
     </div>
   );
 };

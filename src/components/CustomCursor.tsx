@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  * 
  * Custom Cursor Component
- * Strictly implements the Batch 02 cursor reference:
+ * Inverted Luxury Leaf-Green Aesthetic:
  * - States: DEFAULT, LINK, VIEW, DRAG
- * - Small, smooth, responsive, subtle
+ * - Colors: Warm ivory (#f9f6ee), emerald neon (#34d399)
  * - Desktop only: disabled on touch/mobile
  */
 
@@ -20,7 +20,6 @@ export const CustomCursor: React.FC = () => {
   const [isTouchDevice, setIsTouchDevice] = useState(true);
 
   useEffect(() => {
-    // Check if device supports fine hover pointer
     const checkFinePointer = () => {
       const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
       setIsTouchDevice(!hasFinePointer);
@@ -42,7 +41,6 @@ export const CustomCursor: React.FC = () => {
       targetY = e.clientY;
       if (!isVisible) setIsVisible(true);
 
-      // Detect hover target attributes
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
@@ -55,7 +53,6 @@ export const CustomCursor: React.FC = () => {
         }
       }
 
-      // Standard links & buttons
       if (target.closest('a, button, [role="button"], input, textarea, select')) {
         setCursorState('link');
       } else {
@@ -71,7 +68,6 @@ export const CustomCursor: React.FC = () => {
       setIsVisible(true);
     };
 
-    // Smooth spring follow interpolation
     const updateCursorPosition = () => {
       const ease = 0.22;
       currentX += (targetX - currentX) * ease;
@@ -95,7 +91,6 @@ export const CustomCursor: React.FC = () => {
     };
   }, [isTouchDevice, isVisible]);
 
-  // Disable on mobile/touch per directive
   if (isTouchDevice || !isVisible) {
     return null;
   }
@@ -112,23 +107,23 @@ export const CustomCursor: React.FC = () => {
       {/* State: DEFAULT */}
       {cursorState === 'default' && (
         <div className="relative -top-3.5 -left-3.5 flex items-center justify-center w-7 h-7">
-          <div className="w-6 h-6 rounded-full border border-[#1F1F1D]/35 transition-transform duration-200" />
-          <div className="absolute w-1.5 h-1.5 rounded-full bg-[#1F1F1D]" />
+          <div className="w-6 h-6 rounded-full border border-white/20 transition-transform duration-200" />
+          <div className="absolute w-1.5 h-1.5 rounded-full bg-[#34d399]" />
         </div>
       )}
 
       {/* State: LINK */}
       {cursorState === 'link' && (
         <div className="relative -top-4 -left-4 flex items-center justify-center w-8 h-8">
-          <div className="w-8 h-8 rounded-full border-2 border-[#7D9A78] bg-[#7D9A78]/10 transition-transform duration-200 scale-110" />
-          <div className="absolute w-2 h-2 rounded-full bg-[#1F1F1D]" />
+          <div className="w-8 h-8 rounded-full border-2 border-[#34d399] bg-[#34d399]/15 transition-transform duration-200 scale-110 shadow-[0_0_12px_rgba(52,211,153,0.4)]" />
+          <div className="absolute w-2 h-2 rounded-full bg-[#f9f6ee]" />
         </div>
       )}
 
       {/* State: VIEW */}
       {cursorState === 'view' && (
         <div className="relative -top-4 -left-4 flex items-center justify-center w-8 h-8">
-          <div className="w-8 h-8 rounded-full bg-[#7D9A78] flex items-center justify-center text-white text-[9px] font-medium tracking-wider shadow-sm transition-transform duration-150">
+          <div className="w-8 h-8 rounded-full bg-[#34d399] flex items-center justify-center text-[#19241d] text-[9px] font-bold tracking-wider shadow-lg shadow-[#34d399]/30 transition-transform duration-150">
             VIEW
           </div>
         </div>
@@ -136,10 +131,10 @@ export const CustomCursor: React.FC = () => {
 
       {/* State: DRAG */}
       {cursorState === 'drag' && (
-        <div className="relative -top-3.5 -left-5 flex items-center justify-center gap-1 px-2 py-0.5 rounded-full bg-[#FAF7F2]/90 border border-[#7D9A78] shadow-sm text-[#1F1F1D] text-[11px] font-mono">
-          <span className="text-[#7D9A78]">‹</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1F1F1D]" />
-          <span className="text-[#7D9A78]">›</span>
+        <div className="relative -top-3.5 -left-5 flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full bg-[#19241d]/90 border border-[#34d399]/40 shadow-lg text-[#f9f6ee] text-[11px] font-mono">
+          <span className="text-[#34d399]">‹</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" />
+          <span className="text-[#34d399]">›</span>
         </div>
       )}
     </div>
