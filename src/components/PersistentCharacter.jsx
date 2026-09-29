@@ -2,171 +2,119 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  * 
- * Persistent Character Component (.jsx)
- * Wireframe specification:
- * - Single persistent DOM node in a fixed, pointer-events-none layer (`fixed inset-0 z-10`)
- * - GSAP ScrollTrigger timeline smoothly interpolates coordinates across 4 sections:
- *   * Section 1 (Hero): Centered directly in front of giant watermark AFRUZ
- *   * Section 2 (2nd Section): Glides from CENTER to RIGHT side
- *   * Section 3 (3rd Section): Glides across from RIGHT to LEFT side
- *   * Section 4 (4th Section): Scales down with subtle lower opacity at center accent
- * - Zero twisted tube 3D mesh, zero canvas overhead, zero layout thrashing
- * - Respects prefers-reduced-motion
+ * PersistentCharacter Component (.jsx)
+ * Bulletproof Native Scroller for Iframe Preview:
+ * - Zero external scroll library dependencies
+ * - Pure window.addEventListener("scroll") native listener
+ * - Mathematical spatial glide and opacity crossfades based on scrollProgress (0 to 1)
  */
 
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useEffect, useState } from "react";
 
-gsap.registerPlugin(ScrollTrigger);
-
-export const PersistentCharacter = () => {
-  const containerRef = useRef(null);
-  const characterRef = useRef(null);
+export function PersistentCharacter() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const characterEl = characterRef.current;
-    if (!characterEl) return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isMobile = window.innerWidth < 768;
+    const handleScroll = () => {
+      const docHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+      const totalHeight = docHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const currentY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        const progress = Math.min(Math.max(currentY / totalHeight, 0), 1);
+        setScrollProgress(progress);
+      }
+    };
 
-    // Initial position: Section 1 Center
-    gsap.set(characterEl, {
-      xPercent: 0,
-      yPercent: 0,
-      scale: 1,
-      opacity: 1,
-      transformOrigin: '50% 50%',
-    });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    document.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
-    if (reducedMotion) {
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      // 1. Hero ➔ Section 2: Center ➔ Right
-      gsap.to(characterEl, {
-        scrollTrigger: {
-          trigger: '#section-2',
-          start: 'top bottom',
-          end: 'top center',
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-        xPercent: isMobile ? 0 : 28,
-        yPercent: isMobile ? -14 : 0,
-        scale: isMobile ? 0.75 : 0.95,
-        opacity: isMobile ? 0.45 : 1,
-        ease: 'power1.inOut',
-      });
-
-      // 2. Section 2 ➔ Section 3: Right ➔ Left
-      gsap.to(characterEl, {
-        scrollTrigger: {
-          trigger: '#section-3',
-          start: 'top bottom',
-          end: 'top center',
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-        xPercent: isMobile ? 0 : -30,
-        yPercent: isMobile ? -22 : 0,
-        scale: isMobile ? 0.6 : 0.9,
-        opacity: isMobile ? 0.35 : 0.95,
-        ease: 'power1.inOut',
-      });
-
-      // 3. Section 3 ➔ Section 4: Left ➔ Center Accent (scales down, lower opacity)
-      gsap.to(characterEl, {
-        scrollTrigger: {
-          trigger: '#section-4',
-          start: 'top bottom',
-          end: 'top center',
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-        xPercent: 0,
-        yPercent: 20,
-        scale: 0.65,
-        opacity: 0.22,
-        ease: 'power1.inOut',
-      });
-    });
-
-    return () => ctx.revert();
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
+  // Spatial glide math based on scrollProgress (0 to 1)
+  // Section 1 (0 to 0.25): Center (x = 0)
+  // Section 2 (0.25 to 0.55): Glide to Right (x = 36vw on desktop, 0 on mobile)
+  // Section 3 (0.55 to 0.85): Glide to Left (x = -36vw on desktop, 0 on mobile)
+  // Section 4 (0.85 to 1.0): Center & Fade (opacity = 0.35)
+  let xTranslate = 0;
+  let activePose = 1;
+  let opacity = 1;
+
+  if (scrollProgress < 0.25) {
+    xTranslate = 0;
+    activePose = 1;
+  } else if (scrollProgress < 0.55) {
+    xTranslate = isMobile ? 0 : 36; // Right
+    activePose = 2;
+  } else if (scrollProgress < 0.85) {
+    xTranslate = isMobile ? 0 : -36; // Left
+    activePose = 3;
+  } else {
+    xTranslate = 0;
+    activePose = 4;
+    opacity = 0.35; // Muted in contact
+  }
+
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 z-10 pointer-events-none flex items-center justify-center overflow-hidden"
-      aria-hidden="true"
-    >
-      {/* Choreographed Character Node */}
-      <div
-        ref={characterRef}
-        className="relative w-[280px] h-[390px] sm:w-[350px] sm:h-[480px] md:w-[410px] md:h-[560px] flex items-center justify-center will-change-transform select-none"
+    <div className="fixed inset-0 pointer-events-none z-20 flex items-center justify-center overflow-hidden">
+      {/* Background Watermark AFRUZ */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
+        <span className="font-display font-black tracking-tight text-[clamp(3rem,9vw,8rem)] leading-none text-[#f9f6ee] opacity-[0.07] uppercase whitespace-nowrap">
+          AFRUZ
+        </span>
+      </div>
+
+      <div 
+        style={{
+          transform: `translate3d(${xTranslate}vw, 0, 0)`,
+          transition: "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
+          opacity: opacity
+        }}
+        className="relative w-64 md:w-80 aspect-[4/5] flex items-center justify-center select-none"
       >
-        {/* Clean Character Silhouette & Frame */}
-        <div className="relative w-full h-full rounded-[40px] sm:rounded-[48px] bg-gradient-to-b from-[#FBF8F3] via-[#F4EFE6] to-[#ECE5D8] border border-[#E4DDD0] shadow-xl shadow-black/4 p-6 sm:p-8 flex flex-col items-center justify-between overflow-hidden">
-          {/* Subtle Ambient Radial Highlight */}
-          <div className="absolute -top-12 -left-12 w-48 h-48 rounded-full bg-white/60 blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-10 -right-10 w-44 h-44 rounded-full bg-[#7D9A78]/15 blur-2xl pointer-events-none" />
-
-          {/* Top subtle brand badge */}
-          <div className="w-full flex items-center justify-between text-[10px] font-mono tracking-widest text-[#8A8780] uppercase z-10">
-            <span>AFRUZ</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#7D9A78]" />
-          </div>
-
-          {/* Stylized Minimal Character Artwork */}
-          <div className="relative w-40 h-52 sm:w-48 sm:h-64 flex items-center justify-center my-auto">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#FAF7F2] to-[#EAE4D7] opacity-80" />
-
-            <svg
-              viewBox="0 0 200 280"
-              className="w-full h-full drop-shadow-sm"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <ellipse cx="100" cy="265" rx="55" ry="10" fill="rgba(31,31,29,0.08)" />
-              <path
-                d="M100 45 C122 45 135 60 135 85 C135 110 120 125 100 125 C80 125 65 110 65 85 C65 60 78 45 100 45 Z"
-                fill="#1F1F1D"
-              />
-              <path
-                d="M50 240 C50 160 72 140 100 140 C128 140 150 160 150 240 Z"
-                fill="#1F1F1D"
-              />
-              <path
-                d="M62 240 C62 175 80 155 100 155 C120 155 138 175 138 240 Z"
-                fill="#FAF7F2"
-              />
-              <path
-                d="M95 155 C85 190 75 220 85 240"
-                stroke="#7D9A78"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-              <path
-                d="M108 165 C118 195 125 215 115 240"
-                stroke="#8FA88B"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-
-          {/* Bottom metadata strip */}
-          <div className="w-full flex items-center justify-between text-[10px] font-mono tracking-wider text-[#8A8780] border-t border-[#E7E3DA]/80 pt-3 z-10">
-            <span>PORTFOLIO SUBJECT</span>
-            <span className="text-[#1F1F1D] font-semibold">2026</span>
-          </div>
-        </div>
+        {/* Pose 1 */}
+        <img 
+          src="/images/first.webp" 
+          alt="Pose 1" 
+          className={`absolute inset-0 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)] transition-opacity duration-500 pointer-events-none ${activePose === 1 ? "opacity-100" : "opacity-0"}`} 
+          draggable={false}
+        />
+        {/* Pose 2 */}
+        <img 
+          src="/images/second.webp" 
+          alt="Pose 2" 
+          className={`absolute inset-0 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)] transition-opacity duration-500 pointer-events-none ${activePose === 2 ? "opacity-100" : "opacity-0"}`} 
+          draggable={false}
+        />
+        {/* Pose 3 */}
+        <img 
+          src="/images/third.webp" 
+          alt="Pose 3" 
+          className={`absolute inset-0 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)] transition-opacity duration-500 pointer-events-none ${activePose === 3 ? "opacity-100" : "opacity-0"}`} 
+          draggable={false}
+        />
+        {/* Pose 4 */}
+        <img 
+          src="/images/fourth.webp" 
+          alt="Pose 4" 
+          className={`absolute inset-0 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)] transition-opacity duration-500 pointer-events-none ${activePose === 4 ? "opacity-100" : "opacity-0"}`} 
+          draggable={false}
+        />
       </div>
     </div>
   );
-};
+}
 
 export default PersistentCharacter;

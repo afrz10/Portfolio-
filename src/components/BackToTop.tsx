@@ -6,19 +6,14 @@
  * - Fixed at bottom-right: bottom-8 right-8 z-50
  * - Hidden during Hero fold; gracefully fades in once scrolled past Hero
  * - Magnetic interaction: subtly pulls toward cursor (max 8px offset) with spring damping
- * - Smooth scroll back to top via Lenis
+ * - Pure native smooth scroll back to top: window.scrollTo({ top: 0, behavior: 'smooth' })
  * - Minimal frosted pill style in creamy white with upward arrow icon & "TOP" label
  */
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUp } from 'lucide-react';
-import Lenis from 'lenis';
 
-interface BackToTopProps {
-  lenisRef: React.RefObject<Lenis | null>;
-}
-
-export const BackToTop: React.FC<BackToTopProps> = ({ lenisRef }) => {
+export const BackToTop: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -27,7 +22,8 @@ export const BackToTop: React.FC<BackToTopProps> = ({ lenisRef }) => {
   useEffect(() => {
     const handleScroll = () => {
       const heroThreshold = window.innerHeight * 0.7;
-      if (window.scrollY > heroThreshold) {
+      const currentY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      if (currentY > heroThreshold) {
         setVisible(true);
       } else {
         setVisible(false);
@@ -35,8 +31,12 @@ export const BackToTop: React.FC<BackToTopProps> = ({ lenisRef }) => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   // Magnetic hover pull
@@ -51,7 +51,6 @@ export const BackToTop: React.FC<BackToTopProps> = ({ lenisRef }) => {
     const deltaX = (e.clientX - centerX) * 0.28;
     const deltaY = (e.clientY - centerY) * 0.28;
 
-    // Clamp to max 8px
     const clampedX = Math.max(-8, Math.min(8, deltaX));
     const clampedY = Math.max(-8, Math.min(8, deltaY));
 
@@ -63,11 +62,7 @@ export const BackToTop: React.FC<BackToTopProps> = ({ lenisRef }) => {
   };
 
   const scrollToTop = () => {
-    if (lenisRef && lenisRef.current) {
-      lenisRef.current.scrollTo(0, { duration: 1.4 });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (

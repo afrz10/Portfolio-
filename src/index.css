@@ -10,20 +10,23 @@
     --border-glass: rgba(255, 255, 255, 0.1);
   }
 
+  html {
+    background-color: #19241d;
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: #19241d;
     color: #f9f6ee;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
     width: 100%;
-    max-width: 100vw;
+    min-height: 100vh;
   }
 
-  html, #root {
+  #root {
     background-color: #19241d;
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
+    min-height: 100vh;
   }
 
   ::-webkit-scrollbar {
