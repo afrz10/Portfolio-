@@ -4,12 +4,12 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://afruz.vercel.app"),
 
   title: {
-    default: "Afruz — Developer · Student · Editor",
+    default: "Afruz — Crafting Ideas Into Digital Experiences",
     template: "%s | Afruz",
   },
 
   description:
-    "Afruz is a student, developer and editor building creative digital projects.",
+    "Welcome to Afruz's portfolio — a creative developer and digital creator exploring code, design, editing, and technology.",
 
   alternates: {
     canonical: "/",
